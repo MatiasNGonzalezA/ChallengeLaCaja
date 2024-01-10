@@ -8,20 +8,27 @@ import com.challenge_java.lacaja.exceptions.EdadInvalidaException;
 import com.challenge_java.lacaja.exceptions.NombreVacioException;
 import com.challenge_java.lacaja.model.Persona;
 import com.challenge_java.lacaja.repository.IPersonaRepository;
-import com.challenge_java.lacaja.service.implement.ProcesadorDeDatosImplement;
 
+
+import com.challenge_java.lacaja.service.implement.ProcesadorDeDatosImplement;
+import com.challenge_java.lacaja.service.mapper.IPersonaMapper;
+import com.challenge_java.lacaja.service.mapper.IPersonaMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 
 public class ProcesadorDeDatosTest {
 
     @Mock
     private IPersonaRepository personaRepository;
+
+    @Mock
+    private IPersonaMapper personaMapperMock;
+
+    private IPersonaMapper personaMapper;
 
     @InjectMocks
     private ProcesadorDeDatosImplement procesadorDeDatosImplement;
@@ -29,18 +36,26 @@ public class ProcesadorDeDatosTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        personaMapper = new IPersonaMapperImpl();
     }
 
 
     @Test
     public void testProcesarDatosConRespuestaValida() {
         Persona persona = new Persona("Matias", 25, "Quilmes");
-        PersonaDTO personaDT0 = new PersonaDTO(persona);
+        PersonaDTO personaDTO = personaMapper.personaAPersonaDTO(persona);
+        when(personaMapperMock.personaDTOAPersona(personaDTO)).thenReturn(persona);
+        when(personaMapperMock.personaAPersonaDTO(persona)).thenReturn(personaDTO);
 
-        ResponseEntity<Object> responseEntity = procesadorDeDatosImplement.procesarDatos(personaDT0);
+        when(personaRepository.save(any())).thenReturn(persona);
+
+        PersonaDTO response = procesadorDeDatosImplement.procesarDatos(personaDTO);
 
         verify(personaRepository, times(1)).save(any());
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertNotNull(response);
+        assertEquals(personaDTO.getNombre(), response.getNombre());
+        assertEquals(personaDTO.getEdad(), response.getEdad());
+        assertEquals(personaDTO.getCiudad(), response.getCiudad());
     }
 
 
@@ -73,7 +88,6 @@ public class ProcesadorDeDatosTest {
         });
     }
 
-
     @Test
     public void testProcesarDatosConCiudadVacia() {
         Persona persona = new Persona("Nombre", 25, "");
@@ -82,18 +96,6 @@ public class ProcesadorDeDatosTest {
         assertThrows(CiudadVaciaException.class, () -> {
             procesadorDeDatosImplement.procesarDatos(personaDTO);
         });
-    }
-
-    @Test
-    public void testProcesarDatosConExcepcionIllegalArgumentException() {
-        Persona persona = new Persona("Nombre", 25, "Quilmes");
-        PersonaDTO personaDTO = new PersonaDTO(persona);
-        doThrow(new IllegalArgumentException("Mensaje de error")).when(personaRepository).save(any());
-
-        ResponseEntity<Object> responseEntity = procesadorDeDatosImplement.procesarDatos(personaDTO);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals("Mensaje de error", responseEntity.getBody());
     }
 
 }

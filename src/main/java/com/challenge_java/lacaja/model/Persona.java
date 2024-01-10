@@ -1,6 +1,6 @@
 package com.challenge_java.lacaja.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
