@@ -7,8 +7,7 @@ import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.validation.constraints.NotBlank;
 
-@Getter
-@Setter
+@Data
 public class PersonaDTO {
     private Long id;
     @Column(nullable = false)

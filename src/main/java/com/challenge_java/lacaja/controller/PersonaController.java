@@ -28,21 +28,22 @@ public class PersonaController {
         return new ResponseEntity<>(personaService.obtenerPersonaProcesada(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/personas/{id}")
+    @DeleteMapping("/personas/eliminar/{id}")
     public ResponseEntity<Object> eliminarPersona(@PathVariable Long id) {
         return new ResponseEntity<>(personaService.eliminarPersona(id), HttpStatus.OK);
+    }
+
+
+    @PatchMapping("/personas/editar/{id}")
+    public ResponseEntity<Object> actualizarPersona(@PathVariable Long id, @RequestBody Persona personaAct){
+
+        return new ResponseEntity<>(personaService.actualizarPersona(id, personaAct), HttpStatus.OK);
     }
 
     @GetMapping("/estadisticasPersonas")
     public ResponseEntity<EstadisticasDTO> estadisticasEdadPersonas() {
         EstadisticasDTO estadisticas = personaService.calcularEstadisticasEdadPersonas();
         return new ResponseEntity<>(estadisticas, HttpStatus.OK);
-    }
-
-    @PatchMapping("/empleados/{id}")
-    public ResponseEntity<Object> actualizarPersona(@PathVariable Long id, @RequestBody Persona personaAct){
-
-        return new ResponseEntity<>(personaService.actualizarPersona(id, personaAct), HttpStatus.OK);
     }
 
 
