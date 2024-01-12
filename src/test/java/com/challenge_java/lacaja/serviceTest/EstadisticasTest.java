@@ -1,9 +1,8 @@
-package com.challenge_java.lacaja.service;
+package com.challenge_java.lacaja.serviceTest;
 
 import com.challenge_java.lacaja.dto.EstadisticasDTO;
 import com.challenge_java.lacaja.repository.IPersonaRepository;
 import com.challenge_java.lacaja.service.implement.PersonaImplement;
-import com.challenge_java.lacaja.service.implement.ProcesadorDeDatosImplement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,7 +31,7 @@ public class EstadisticasTest {
         when(personaRepository.count()).thenReturn(10L);  //ejemplo, tenemos 10 personas en la base de datos
         when(personaRepository.calcularEdadPromedio()).thenReturn(30);  // y la edad promedio es de 30
 
-        EstadisticasDTO estadisticasDTO = personaImplement.calcularEstadisticasPersonas();
+        EstadisticasDTO estadisticasDTO = personaImplement.calcularEstadisticasEdadPersonas();
 
         // Assert
         assertEquals(10L, estadisticasDTO.getTotalPersonas());
@@ -44,7 +43,7 @@ public class EstadisticasTest {
         when(personaRepository.count()).thenReturn(0L);
         when(personaRepository.calcularEdadPromedio()).thenReturn(0);
 
-        EstadisticasDTO estadisticasDTO = personaImplement.calcularEstadisticasPersonas();
+        EstadisticasDTO estadisticasDTO = personaImplement.calcularEstadisticasEdadPersonas();
 
         // Assert
         assertEquals(0L, estadisticasDTO.getTotalPersonas());

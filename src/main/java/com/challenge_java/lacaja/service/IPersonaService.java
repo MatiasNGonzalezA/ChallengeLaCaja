@@ -15,7 +15,7 @@ public interface IPersonaService {
 
     EstadisticasDTO calcularEstadisticasEdadPersonas();
 
-    String eliminarEmpleado(Long id);
+    String eliminarPersona(Long id);
 
     PersonaDTO actualizarPersona(Long id, Persona personaAct);
 }

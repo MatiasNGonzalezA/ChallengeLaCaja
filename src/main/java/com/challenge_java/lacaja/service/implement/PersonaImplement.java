@@ -38,26 +38,26 @@ public class PersonaImplement implements IPersonaService {
 
     @Override
     public Optional<PersonaDTO> obtenerPersonaProcesada(Long id) {
-        Optional<PersonaDTO> personasProcesada =personaRepository.findById(id).map(persona -> personaMapper.personaAPersonaDTO(persona));
 
-        return personasProcesada;
+        Persona personaEncontrada = personaRepository.findById(id)
+                .orElseThrow(() -> new PersonaConIdNoEncontradoException("No se encontró la persona con el id: " + id));
+
+        return Optional.ofNullable(personaMapper.personaAPersonaDTO(personaEncontrada));
     }
 
     @Override
     public PersonaDTO actualizarPersona(Long id,Persona personaAct){
 
-        Persona personaEncontrada = personaRepository.findById(id).orElse(null);
 
-        if (personaEncontrada == null) {
-            throw new PersonaNoEncontradaException("No se encontro el empleado con el id: " + id);
-        }
+        Persona personaEncontrada = personaRepository.findById(id)
+                .orElseThrow(() -> new PersonaNoEncontradaException("No se encontró el persona con el id: " + id));
 
         if (personaAct.getEdad() < 1) {
-            throw new EdadInvalidaException("La edad del empleado no puede ser menor a 1 año");
+            throw new EdadInvalidaException("La edad de la persona no puede ser menor a 1 año");
         }
 
         if (personaAct.getEdad() > 150) {
-            throw new EdadInvalidaException("La edad del empleado no puede ser mayor a 150 años");
+            throw new EdadInvalidaException("La edad de la persona no puede ser mayor a 150 años");
         }
 
         personaEncontrada.setNombre(personaAct.getNombre());
@@ -72,11 +72,11 @@ public class PersonaImplement implements IPersonaService {
     }
 
     @Override
-    public String eliminarEmpleado(Long id) {
-        Optional<Persona> empleado = personaRepository.findById(id);
+    public String eliminarPersona(Long id) {
+        Optional<Persona> personaEncontrada = personaRepository.findById(id);
 
-        if (empleado.isEmpty()) {
-            throw new PersonaConIdNoEncontradoException("No se encontro el empleado con el id: " + id);
+        if (personaEncontrada.isEmpty()) {
+            throw new PersonaConIdNoEncontradoException("No se encontro la persona con el id: " + id);
         }
 
         personaRepository.deleteById(id);
@@ -91,6 +91,7 @@ public class PersonaImplement implements IPersonaService {
         int edadPromedio = personaRepository.calcularEdadPromedio();
         return new EstadisticasDTO(totalPersonas, edadPromedio);
     }
+
 
 
 }

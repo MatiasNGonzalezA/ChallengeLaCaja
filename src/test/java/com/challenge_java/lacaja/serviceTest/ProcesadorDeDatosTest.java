@@ -1,4 +1,4 @@
-package com.challenge_java.lacaja.service;
+package com.challenge_java.lacaja.serviceTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -35,7 +35,7 @@ public class ProcesadorDeDatosTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         personaMapper = new IPersonaMapperImpl();
     }
 
@@ -44,6 +44,7 @@ public class ProcesadorDeDatosTest {
     public void testProcesarDatosConRespuestaValida() {
         Persona persona = new Persona("Matias", 25, "Quilmes");
         PersonaDTO personaDTO = personaMapper.personaAPersonaDTO(persona);
+//        persona = personaMapper.personaDTOAPersona(personaDTO);
         when(personaMapperMock.personaDTOAPersona(personaDTO)).thenReturn(persona);
         when(personaMapperMock.personaAPersonaDTO(persona)).thenReturn(personaDTO);
 
@@ -53,6 +54,8 @@ public class ProcesadorDeDatosTest {
 
         verify(personaRepository, times(1)).save(any());
         assertNotNull(response);
+//        assertNotNull(persona);
+//        assertNotNull(personaDTO);
         assertEquals(personaDTO.getNombre(), response.getNombre());
         assertEquals(personaDTO.getEdad(), response.getEdad());
         assertEquals(personaDTO.getCiudad(), response.getCiudad());

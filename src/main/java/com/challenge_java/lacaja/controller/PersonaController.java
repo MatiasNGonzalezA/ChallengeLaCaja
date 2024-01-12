@@ -30,7 +30,7 @@ public class PersonaController {
 
     @DeleteMapping("/personas/{id}")
     public ResponseEntity<Object> eliminarPersona(@PathVariable Long id) {
-        return new ResponseEntity<>(personaService.eliminarEmpleado(id), HttpStatus.OK);
+        return new ResponseEntity<>(personaService.eliminarPersona(id), HttpStatus.OK);
     }
 
     @GetMapping("/estadisticasPersonas")

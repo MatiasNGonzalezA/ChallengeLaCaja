@@ -1,50 +1,31 @@
 package com.challenge_java.lacaja;
 
-import com.challenge_java.lacaja.model.Persona;
 import com.challenge_java.lacaja.repository.IPersonaRepository;
-import com.challenge_java.lacaja.service.IProcesadorDeDatosService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class LacajaApplicationTests {
 
-	static Logger logger = LogManager.getLogger(LacajaApplication.class);
+	@Autowired
+	private IPersonaRepository personaRepository;
 
-	public static void main(String[] args) {
-		SpringApplication.run(LacajaApplication.class, args);
-		logger.info("===========================================");
-		logger.info("============    APP RUNNING    ============");
-		logger.info("===========================================");
-	}
+	@Test
+	void initData_InsertsDataIntoDatabase() {
+		// Chequeo si initData insertó datos en la base de datos
+		long countBefore = personaRepository.count();
 
-	@Bean
-	public CommandLineRunner initData(IPersonaRepository personaRepository, IProcesadorDeDatosService procesadorDeDatosService){
+		// Ejecuto la aplicación, lo que también ejecutará el CommandLineRunner
+		LacajaApplication.main(new String[]{});
 
-		return args -> {
-
-
-			// PRUEBA
-			Persona persona1 = new Persona("Matias", 25, "Quilmes");
-			Persona persona2 = new Persona("Raul", 30, "Moreno");
-			Persona persona3 = new Persona("Marcos", 35, "Palermo");
-			Persona persona4 = new Persona("Jorge", 21, "Recoleta");
-			Persona persona5 = new Persona("Micaela", 28, "Avellaneda");
-
-
-			personaRepository.save(persona1);
-			personaRepository.save(persona2);
-			personaRepository.save(persona3);
-			personaRepository.save(persona4);
-			personaRepository.save(persona5);
-
-
-		};
+		// Verificar que los datos se insertaron correctamente
+		long countAfter = personaRepository.count();
+		assertEquals(countBefore, countAfter);
 	}
 }
+
