@@ -17,8 +17,8 @@ public class ProcesarController {
 
     @PostMapping("/procesar")
     public ResponseEntity<String> procesarDatos(@RequestBody PersonaDTO persona) {
-        procesadorDeDatosService.procesarDatos(persona);
-        return ResponseEntity.ok("Datos procesados y almacenados correctamente.");
+            procesadorDeDatosService.procesarDatos(persona);
+            return ResponseEntity.ok("Datos procesados y almacenados correctamente.");
     }
 
 

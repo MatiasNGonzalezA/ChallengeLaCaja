@@ -70,7 +70,7 @@ public class PersonaControllerTest {
                 personadto
         ));
 
-        ResponseEntity<Optional<PersonaDTO>> response = personaController.personaProcesada(id);
+        ResponseEntity<Optional<PersonaDTO>> response = (ResponseEntity<Optional<PersonaDTO>>) personaController.personaProcesada(id);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Juan", response.getBody().get().getNombre());

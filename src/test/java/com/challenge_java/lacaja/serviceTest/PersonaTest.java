@@ -78,30 +78,80 @@ public class PersonaTest {
         assertEquals(1L, personaEncontrada.get().getId());
     }
 
+//    @Test
+//    public void testActualizarPersonaExitoso() {
+//        // Datos de prueba
+//        Long id = 1L;
+//        Persona personaEncontrada = new Persona("Antonio", 30, "Buenos Aires");
+//        personaEncontrada.setId(id);
+//
+//        Persona personaAct = new Persona("Antonio Actualizado", 35, "Rosario");
+//
+//        PersonaDTO personaEncontradaDTO = personaMapper.personaAPersonaDTO(personaAct);
+//
+//
+//        // Configuración de mock
+//        when(personaRepository.findById(any())).thenReturn(Optional.of(personaEncontrada));
+//        when(personaMapper.personaAPersonaDTO(personaEncontrada)).thenReturn(personaEncontradaDTO);
+//
+//        // Llamada al método que se va a probar
+//        PersonaDTO resultado = personaImplement.actualizarPersona(id, personaAct);
+//
+//        // Verificaciones
+//        assertNotNull(resultado);
+//        assertEquals(personaAct.getNombre(), resultado.getNombre());
+//        assertEquals(personaAct.getEdad(), resultado.getEdad());
+//        assertEquals(personaAct.getCiudad(), resultado.getCiudad());
+//
+//        // Verificar que se llamó al método save del repository una vez
+//        verify(personaRepository, times(1)).save(any());
+//    }
     @Test
     public void testActualizarPersonaExitoso() {
         Long id = 1L;
         Persona personaEncontrada = new Persona("Antonio", 30, "Buenos Aires");
         personaEncontrada.setId(id);
 
-        //simulo que actualizo la persona encontrada
-        personaEncontrada.setNombre("Antonio Actualizado");
-        personaEncontrada.setCiudad("Rosario");
-
-        PersonaDTO personaEncontradaDTO = personaMapper.personaAPersonaDTO(personaEncontrada);
+        Persona personaAct = new Persona("Antonio Actualizado", 35, "Rosario");
+        personaEncontrada = personaAct;
+        PersonaDTO personaActDTO = personaMapper.personaAPersonaDTO(personaAct);
 
         when(personaRepository.findById(id)).thenReturn(Optional.of(personaEncontrada));
-        when(personaMapperMock.personaAPersonaDTO(personaEncontrada)).thenReturn(personaEncontradaDTO);
+        when(personaMapperMock.personaAPersonaDTO(personaAct)).thenReturn(personaActDTO);
 
-        PersonaDTO resultado = personaImplement.actualizarPersona(id, personaEncontrada);
+        PersonaDTO resultado = personaImplement.actualizarPersona(id, personaAct);
 
+        assertNotNull(resultado);
+        assertEquals(personaAct.getNombre(), resultado.getNombre());
+        assertEquals(personaAct.getEdad(), resultado.getEdad());
+        assertEquals(personaAct.getCiudad(), resultado.getCiudad());
+
+        verify(personaRepository, times(1)).save(personaAct);
+    }
+
+
+
+    @Test
+    public void testActualizarPersonaDatosVacios() {
+        Long id = 1L;
+        Persona personaEncontrada = new Persona("Antonio", 30, "Buenos Aires");
+        personaEncontrada.setId(id);
+
+        Persona personaAct = new Persona("", 35, "");
+        personaEncontrada = personaAct;
+        PersonaDTO personaActDTO = personaMapper.personaAPersonaDTO(personaAct);
+
+        when(personaRepository.findById(id)).thenReturn(Optional.of(personaEncontrada));
+        when(personaMapperMock.personaAPersonaDTO(personaAct)).thenReturn(personaActDTO);
+
+        PersonaDTO resultado = personaImplement.actualizarPersona(id, personaAct);
 
         assertNotNull(resultado);
         assertEquals(personaEncontrada.getNombre(), resultado.getNombre());
-        assertEquals(personaEncontrada.getEdad(), resultado.getEdad());
+        assertEquals(personaAct.getEdad(), resultado.getEdad());
         assertEquals(personaEncontrada.getCiudad(), resultado.getCiudad());
 
-        verify(personaRepository, times(1)).save(personaEncontrada);
+        verify(personaRepository, times(1)).save(personaAct);
     }
 
 

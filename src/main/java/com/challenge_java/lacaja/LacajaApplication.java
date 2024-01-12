@@ -20,9 +20,6 @@ public class LacajaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LacajaApplication.class, args);
-		logger.info("===========================================");
-		logger.info("============    APP RUNNING    ============");
-		logger.info("===========================================");
 	}
 
 

@@ -2,13 +2,13 @@ package com.challenge_java.lacaja.model;
 
 import javax.persistence.*;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

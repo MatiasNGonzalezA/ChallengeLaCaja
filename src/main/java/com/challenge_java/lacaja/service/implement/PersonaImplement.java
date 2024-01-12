@@ -46,31 +46,28 @@ public class PersonaImplement implements IPersonaService {
     }
 
     @Override
-    public PersonaDTO actualizarPersona(Long id,Persona personaAct){
-
-
+    public PersonaDTO actualizarPersona(Long id, Persona personaAct) {
         Persona personaEncontrada = personaRepository.findById(id)
                 .orElseThrow(() -> new PersonaNoEncontradaException("No se encontró el persona con el id: " + id));
 
-        if (personaAct.getEdad() < 1) {
-            throw new EdadInvalidaException("La edad de la persona no puede ser menor a 1 año");
+        if (personaAct.getEdad() < 1 || personaAct.getEdad() > 150) {
+            throw new EdadInvalidaException("La edad de la persona debe estar entre 1 y 150 años");
         }
 
-        if (personaAct.getEdad() > 150) {
-            throw new EdadInvalidaException("La edad de la persona no puede ser mayor a 150 años");
+        if (personaAct.getNombre() != null && !personaAct.getNombre().isEmpty()) {
+            personaEncontrada.setNombre(personaAct.getNombre());
         }
 
-        personaEncontrada.setNombre(personaAct.getNombre());
+        if (personaAct.getCiudad() != null && !personaAct.getCiudad().isEmpty()) {
+            personaEncontrada.setCiudad(personaAct.getCiudad());
+        }
+
         personaEncontrada.setEdad(personaAct.getEdad());
-        personaEncontrada.setCiudad(personaAct.getCiudad());
-
 
         personaRepository.save(personaEncontrada);
 
-
         return personaMapper.personaAPersonaDTO(personaEncontrada);
     }
-
     @Override
     public String eliminarPersona(Long id) {
         Optional<Persona> personaEncontrada = personaRepository.findById(id);

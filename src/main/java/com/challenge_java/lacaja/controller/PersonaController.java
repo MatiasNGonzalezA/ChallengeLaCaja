@@ -2,6 +2,8 @@ package com.challenge_java.lacaja.controller;
 
 import com.challenge_java.lacaja.dto.EstadisticasDTO;
 import com.challenge_java.lacaja.dto.PersonaDTO;
+import com.challenge_java.lacaja.exceptions.PersonaConIdNoEncontradoException;
+import com.challenge_java.lacaja.exceptions.PersonaNoEncontradaException;
 import com.challenge_java.lacaja.model.Persona;
 import com.challenge_java.lacaja.service.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +26,21 @@ public class PersonaController {
     }
 
     @GetMapping("/personas/{id}")
-    public ResponseEntity<Optional<PersonaDTO>> personaProcesada(@PathVariable Long id) {
-        return new ResponseEntity<>(personaService.obtenerPersonaProcesada(id), HttpStatus.OK);
+    public ResponseEntity<?> personaProcesada(@PathVariable Long id) {
+            return ResponseEntity.ok(personaService.obtenerPersonaProcesada(id));
     }
-
     @DeleteMapping("/personas/eliminar/{id}")
     public ResponseEntity<Object> eliminarPersona(@PathVariable Long id) {
-        return new ResponseEntity<>(personaService.eliminarPersona(id), HttpStatus.OK);
+            return ResponseEntity.ok(personaService.eliminarPersona(id));
     }
 
 
     @PatchMapping("/personas/editar/{id}")
     public ResponseEntity<Object> actualizarPersona(@PathVariable Long id, @RequestBody Persona personaAct){
-
         return new ResponseEntity<>(personaService.actualizarPersona(id, personaAct), HttpStatus.OK);
     }
 
-    @GetMapping("/estadisticasPersonas")
+    @GetMapping("/estadisticasEdades")
     public ResponseEntity<EstadisticasDTO> estadisticasEdadPersonas() {
         EstadisticasDTO estadisticas = personaService.calcularEstadisticasEdadPersonas();
         return new ResponseEntity<>(estadisticas, HttpStatus.OK);
