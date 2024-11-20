@@ -31,7 +31,6 @@ public class PersonaTest {
     @Mock
     private IPersonaMapper personaMapperMock;
 
-    private IPersonaMapper personaMapper;
 
     @InjectMocks
     private PersonaImplement personaImplement;
@@ -39,7 +38,6 @@ public class PersonaTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        personaMapper = new IPersonaMapperImpl();
     }
 
     @Test
@@ -68,7 +66,7 @@ public class PersonaTest {
     public void testObtenerPersonaProcesada(){
         Persona persona = new Persona("Matias", 25, "Quilmes");
         persona.setId(1L);
-        PersonaDTO personaDTO = personaMapper.personaAPersonaDTO(persona);
+        PersonaDTO personaDTO = personaMapperMock.personaAPersonaDTO(persona);
         when(personaRepository.findById(persona.getId())).thenReturn(Optional.of(persona));
         when(personaMapperMock.personaDTOAPersona(personaDTO)).thenReturn(persona);
         when(personaMapperMock.personaAPersonaDTO(persona)).thenReturn(personaDTO);
@@ -114,7 +112,7 @@ public class PersonaTest {
 
         Persona personaAct = new Persona("Antonio Actualizado", 35, "Rosario");
         personaEncontrada = personaAct;
-        PersonaDTO personaActDTO = personaMapper.personaAPersonaDTO(personaAct);
+        PersonaDTO personaActDTO = personaMapperMock.personaAPersonaDTO(personaAct);
 
         when(personaRepository.findById(id)).thenReturn(Optional.of(personaEncontrada));
         when(personaMapperMock.personaAPersonaDTO(personaAct)).thenReturn(personaActDTO);
@@ -139,7 +137,7 @@ public class PersonaTest {
 
         Persona personaAct = new Persona("", 35, "");
         personaEncontrada = personaAct;
-        PersonaDTO personaActDTO = personaMapper.personaAPersonaDTO(personaAct);
+        PersonaDTO personaActDTO = personaMapperMock.personaAPersonaDTO(personaAct);
 
         when(personaRepository.findById(id)).thenReturn(Optional.of(personaEncontrada));
         when(personaMapperMock.personaAPersonaDTO(personaAct)).thenReturn(personaActDTO);
